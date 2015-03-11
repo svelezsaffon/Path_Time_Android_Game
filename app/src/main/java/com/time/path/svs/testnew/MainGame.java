@@ -12,11 +12,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.ActionMenuView;
+import android.widget.Button;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+
+
+
+
+import com.time.path.svs.testnew.UI.Board_Logic.Board;
+import com.time.path.svs.testnew.UI.Board_Logic.BoardSlot;
 
 
 public class MainGame extends ActionBarActivity {
@@ -34,7 +42,7 @@ public class MainGame extends ActionBarActivity {
 
     private int col_row;
 
-    Button [][]board=null;
+    Board board=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,8 @@ public class MainGame extends ActionBarActivity {
 
         this.startVariables();
     }
+
+
 
     private void startVariables() {
         this.bar=(ProgressBar) findViewById(R.id.bar_time_left);
@@ -57,8 +67,7 @@ public class MainGame extends ActionBarActivity {
 
 
 
-        this.board=new Button[this.col_row][this.col_row];
-
+        this.board=new Board(this.col_row,this.col_row);
 
         LinearLayout board_layout=(LinearLayout) findViewById(R.id.board_layout);
 
@@ -69,26 +78,25 @@ public class MainGame extends ActionBarActivity {
 
             for(int j=0;j<this.col_row;j++,id++){
 
-                this.board[i][j]=new Button(this);
-                this.board[i][j].setText(i+","+j);
-                this.board[i][j].setBackgroundColor(Color.BLACK);
+                this.board.newButton(i,j,this);
+
+                this.board.setId(i,j,id);
+
+                this.board.setBackGroundColor(i,j,Color.DKGRAY);
+
+
+                this.board.setOnClickListener(i,j,new View.OnClickListener() {
+                    public void onClick(View viw) {
+                        clickedBoardButton(viw);
+                    }
+                });
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.weight=1;
 
-                aux_layout.addView(this.board[i][j],params);
-
-                this.board[i][j].setId(id);
-
-
-                this.board[i][j].setOnClickListener(new View.OnClickListener(){
-                    public  void onClick(View viw){
-                        clickedBoardButton(viw);
-                    }
-                });
-
+                aux_layout.addView(this.board.getButton(i,j),params);
 
 
             }
@@ -100,22 +108,46 @@ public class MainGame extends ActionBarActivity {
     }
 
 
-    public void clickedBoardButton(View view){
 
-        System.out.println(view.getId());
+    public void generateBoard(){
+
+        this.board.reinitialize();
+        int id=0;
+        for(int i=0;i<this.col_row;i++){
+
+            for(int j=0;j<this.col_row;j++,id++){
+
+                this.board.setId(i,j,id);
+
+                this.board.setBackGroundColor(i,j,Color.DKGRAY);
+
+                this.board.setOnClickListener(i,j,new View.OnClickListener() {
+                    public void onClick(View viw) {
+                        clickedBoardButton(viw);
+                    }
+                });
+
+            }
+
+        }
+    }
+
+
+
+    public void clickedBoardButton(View view){
 
 
         int row= view.getId() / this.col_row;
 
         int col=view.getId() % this.col_row;
 
+        this.board.click(row, col);
+
+    }
 
 
-        this.board[row][col].setBackgroundColor(Color.RED);
-
-
-
-
+    public void checkBoard(){
+        //Do calculation of score
     }
 
 
@@ -161,12 +193,11 @@ public class MainGame extends ActionBarActivity {
         public GameCountDown(int startTime,int interval){
             super(startTime,interval);
             this.startime=startTime;
+            startButton.setEnabled(false);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-
-
 
             bar.setProgress((int)millisUntilFinished);
 
@@ -199,6 +230,9 @@ public class MainGame extends ActionBarActivity {
         public void onFinish() {
 
             bar.setProgress(0);
+
+            checkBoard();
+            startButton.setEnabled(true);
 
         }
 
