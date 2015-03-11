@@ -5,9 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="start">Start Game</string>
-    <string name="level_easy">Level 1: 8 squares</string>
+    <string name="level_easy">Level 1: 9 squares</string>
     <string name="level_medium">Level 1: 16 squares</string>
-    <string name="level_high">Level 1: 32 squares</string>
+    <string name="level_high">Level 1: 36 squares</string>
     <string name="level_pro">Level 1: 64 squares</string>
     <string name="method__init_game_activity">initGameActivity</string>
     <string name="title_activity_main_game">MainGame</string>

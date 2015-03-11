@@ -14,23 +14,57 @@
         android:layout_centerHorizontal="true">
 
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:id="@+id/bar_time_left"
-            android:layout_gravity="center_horizontal" />
+            android:id="@+id/board_buttons">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+
+                android:id="@+id/bar_time_left"
+                android:layout_gravity="center_horizontal" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/board_layout">
+
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0">
 
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:text="New Button"
             android:id="@+id/button_start_game"
             android:onClick="@string/method_start_game"
             android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

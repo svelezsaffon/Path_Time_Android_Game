@@ -85,7 +85,7 @@ public class MainMenu extends ActionBarActivity {
         switch(this.RBgroup.getCheckedRadioButtonId()){
 
             case R.id.rbeasy: {
-                size=8;
+                size=9;
                 break;
             }
             case R.id.rbmedium: {
@@ -93,11 +93,11 @@ public class MainMenu extends ActionBarActivity {
                 break;
             }
             case R.id.rbhigh:{
-                size=32;
+                size=36;
                 break;
             }
             case R.id.rbpro:{
-                size=64;
+                size=7*7;
                 break;
             }
 
