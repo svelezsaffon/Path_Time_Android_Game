@@ -37,6 +37,7 @@ public class GameLogic {
     public void reset() {
         this.level=DEFAULT_START_LEVEL;
         this.lifes=DEFAULT_LIFES;
+        this.isDead=false;
     }
 
 
