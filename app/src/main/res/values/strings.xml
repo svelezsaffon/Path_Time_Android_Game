@@ -17,5 +17,6 @@
     <string name="start_button_game">Start Game</string>
     <string name="pause_button_game">Pause Game</string>
     <string name="method_start_game">startGame</string>
+    <string name="start_settings">Edit Preferences</string>
 
 </resources>

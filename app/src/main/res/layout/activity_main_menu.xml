@@ -61,5 +61,14 @@
             android:id="@+id/button"
 
             android:onClick="@string/method__init_game_activity"></Button>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_settings"
+            android:id="@+id/button2"
+            android:onClick="startSettings" />
+
+
     </LinearLayout>
 </RelativeLayout>

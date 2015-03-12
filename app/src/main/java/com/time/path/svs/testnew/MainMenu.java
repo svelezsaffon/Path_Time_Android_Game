@@ -1,6 +1,7 @@
 package com.time.path.svs.testnew;
 
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,13 +9,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.content.SharedPreferences;
+
+
+import com.time.path.svs.testnew.Settings.settings;
+
+
 
 
 public class MainMenu extends ActionBarActivity {
 
 
     RadioButton []radios=new RadioButton[4];
+
     RadioGroup RBgroup=null;
+
+
+    private settings appsettings;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +49,21 @@ public class MainMenu extends ActionBarActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+
+
+        if(requestCode==1) {
+            System.out.println("Name=" + this.appsettings.getPlayerName());
+            System.out.println("Vibrate=" +this.appsettings.vibrate());
+            System.out.println("Animate=" +this.appsettings.animate());
+
+        }
+
+
+    }
 
 
     @Override
@@ -67,6 +94,13 @@ public class MainMenu extends ActionBarActivity {
 
     public void startVariables(){
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        settings.create_first(sharedPrefs);
+
+        this.appsettings=settings.getInstance();
+
+
         this.radios[0]=(RadioButton) findViewById(R.id.rbeasy);
         this.radios[1]=(RadioButton) findViewById(R.id.rbmedium);
         this.radios[2]=(RadioButton) findViewById(R.id.rbhigh);
@@ -76,6 +110,12 @@ public class MainMenu extends ActionBarActivity {
 
     }
 
+
+
+    public void startSettings(View view){
+        Intent startGActivity=new Intent(this,SettingsActivity.class);
+        startActivityForResult(startGActivity,1);
+    }
 
     public void initGameActivity(View view){
 

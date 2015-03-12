@@ -24,8 +24,7 @@ import android.widget.ProgressBar;
 
 
 import com.time.path.svs.testnew.UI.Board_Logic.Board;
-import com.time.path.svs.testnew.UI.Board_Logic.BoardSlot;
-
+import com.time.path.svs.testnew.Settings.settings;
 
 public class MainGame extends ActionBarActivity {
 
@@ -43,6 +42,9 @@ public class MainGame extends ActionBarActivity {
     private int col_row;
 
     Board board=null;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

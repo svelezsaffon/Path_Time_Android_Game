@@ -8,6 +8,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 
 import com.time.path.svs.testnew.R;
+import com.time.path.svs.testnew.Settings.settings;
 
 /**
  * Created by santiago on 3/11/15.
@@ -19,6 +20,11 @@ public class Board {
 
 
     private int x,y,rows,cols;
+
+
+
+    settings appsettings;
+
 
 
     public Button getButton(int i, int j){
@@ -37,6 +43,8 @@ public class Board {
         this.fullBoard=new BoardSlot[rows][cols];
         this.x=0;
         this.y=0;
+
+        this.appsettings=settings.getInstance();
 
     }
 
@@ -104,18 +112,15 @@ public class Board {
             }
 
 
-            /*
-            if(this.getButton(this.x,this.y).getAnimation()!=null){
-                this.getButton(this.x,this.y).getAnimation().cancel();
+            if(this.appsettings.animate()) {
+
+                AlphaAnimation mAnimation = new AlphaAnimation(1, 0);
+                mAnimation.setDuration(200);
+                mAnimation.setRepeatCount(AlphaAnimation.INFINITE);
+                mAnimation.setRepeatMode(AlphaAnimation.REVERSE);
+                this.getButton(i, j).startAnimation(mAnimation);
+
             }
-
-            AlphaAnimation mAnimation = new AlphaAnimation(1, 0);
-            mAnimation.setDuration(200);
-            mAnimation.setRepeatCount(AlphaAnimation.INFINITE);
-            mAnimation.setRepeatMode(AlphaAnimation.REVERSE);
-            this.getButton(i,j).startAnimation(mAnimation);
-            */
-
 
             this.setLastPositionClick(i,j);
 
