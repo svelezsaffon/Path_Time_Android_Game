@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.os.Vibrator;
 import android.media.MediaPlayer;
+import android.widget.ImageView;
+import android.graphics.drawable.Drawable;
 
 
 import com.time.path.svs.testnew.Game_Logic.DeadException;
@@ -57,14 +59,13 @@ public class MainGame extends ActionBarActivity {
 
     private MediaPlayer deadSound;
 
+    private ImageView healtBar[];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_game);
-
-
-
         this.startVariables();
     }
 
@@ -101,6 +102,9 @@ public class MainGame extends ActionBarActivity {
         this.prepareSounds();
 
 
+        this.initLifes();
+
+
         int id=0;
         for(int i=0;i<this.col_row;i++){
 
@@ -135,6 +139,30 @@ public class MainGame extends ActionBarActivity {
         }
 
         this.addDangers();
+
+    }
+
+    private void updateLifes(){
+        int pos=this.logic.remainingLifes();
+        Drawable drawable = getResources().getDrawable(R.drawable.empty_heart);
+        this.healtBar[pos].setImageDrawable(drawable);
+    }
+
+
+    private void initLifes(){
+        LinearLayout aux_layout=new LinearLayout(this);
+
+        this.healtBar=new ImageView[5];
+
+        for(int i=0;i<5;i++) {
+            this.healtBar[i]=new ImageView(this);
+            Drawable drawable = getResources().getDrawable(R.drawable.heart_icon);
+            this.healtBar[i].setImageDrawable(drawable);
+            aux_layout.addView(this.healtBar[i]);
+        }
+
+        LinearLayout board_layout=(LinearLayout) findViewById(R.id.healt_layout);
+        board_layout.addView(aux_layout);
     }
 
 
@@ -197,6 +225,7 @@ public class MainGame extends ActionBarActivity {
 
                 if (this.board.isDanger(row, col)) {
 
+
                     try {
 
                         this.logic.hitDanger();
@@ -219,6 +248,7 @@ public class MainGame extends ActionBarActivity {
 
                     }
 
+                    this.updateLifes();
                     this.board.removeDanger(row, col);
                 }
 

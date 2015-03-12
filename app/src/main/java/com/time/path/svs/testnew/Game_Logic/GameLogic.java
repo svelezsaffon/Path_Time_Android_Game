@@ -74,6 +74,9 @@ public class GameLogic {
     }
 
 
+    public int remainingLifes(){
+        return this.lifes;
+    }
 
     public void hitDanger() throws DeadException{
         this.lifes--;
