@@ -10,9 +10,20 @@ public class BoardSlot {
     public Button button;
 
 
+    private boolean has_dangers;
+
+    public BoardSlot(){
+        this.has_dangers=false;
+    }
 
 
+    public void makeDangers(){
+        this.has_dangers=true;
+    }
 
+    public boolean isDanger(){
+        return this.has_dangers;
+    }
 
 
 

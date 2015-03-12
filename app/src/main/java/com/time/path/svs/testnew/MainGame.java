@@ -18,13 +18,13 @@ import android.widget.Button;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 
-
-
-
+import com.time.path.svs.testnew.Game_Logic.DeadException;
+import com.time.path.svs.testnew.Game_Logic.GameLogic;
 import com.time.path.svs.testnew.UI.Board_Logic.Board;
-import com.time.path.svs.testnew.Settings.settings;
+import com.time.path.svs.testnew.Game_Logic.pair;
 
 public class MainGame extends ActionBarActivity {
 
@@ -45,6 +45,8 @@ public class MainGame extends ActionBarActivity {
 
 
 
+    private GameLogic logic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,9 @@ public class MainGame extends ActionBarActivity {
 
 
     private void startVariables() {
+
+
+
         this.bar=(ProgressBar) findViewById(R.id.bar_time_left);
         this.startButton=(Button) findViewById(R.id.button_start_game);
 
@@ -68,6 +73,7 @@ public class MainGame extends ActionBarActivity {
         this.col_row=(int)Math.sqrt(this.boardSize);
 
 
+        this.logic=GameLogic.getInstance(this.col_row);
 
         this.board=new Board(this.col_row,this.col_row);
 
@@ -84,7 +90,7 @@ public class MainGame extends ActionBarActivity {
 
                 this.board.setId(i,j,id);
 
-                this.board.setBackGroundColor(i,j,Color.DKGRAY);
+                //this.board.setBackGroundColor(i,j,Color.DKGRAY);
 
 
                 this.board.setOnClickListener(i,j,new View.OnClickListener() {
@@ -106,9 +112,24 @@ public class MainGame extends ActionBarActivity {
             board_layout.addView(aux_layout);
         }
 
-
+        this.addDangers();
     }
 
+
+
+    public void addDangers(){
+        pair<Integer> []positions=this.logic.generateDangerPositions();
+
+        for(int i=0;i<positions.length;i++){
+            this.board.makeSkullDanger(positions[i].first,positions[i].second);
+        }
+    }
+
+
+
+    public void showToast(String message,int time){
+        Toast.makeText(this, message, time).show();
+    }
 
 
     public void generateBoard(){
@@ -138,12 +159,34 @@ public class MainGame extends ActionBarActivity {
 
     public void clickedBoardButton(View view){
 
-
         int row= view.getId() / this.col_row;
 
         int col=view.getId() % this.col_row;
 
-        this.board.click(row, col);
+        if(this.board.click(row, col)){
+
+            if(this.board.isDanger(row,col)){
+
+                try {
+
+                    this.logic.hitDanger();
+
+                    this.showToast(getString(R.string.click_danger),Toast.LENGTH_SHORT);
+
+                } catch (DeadException e) {
+
+                    this.showToast(getString(R.string.die_message),Toast.LENGTH_LONG);
+
+                    e.printStackTrace();
+
+                }
+            }
+
+
+
+        }else{
+            this.showToast(getString(R.string.invalid_move),Toast.LENGTH_SHORT);
+        }
 
     }
 

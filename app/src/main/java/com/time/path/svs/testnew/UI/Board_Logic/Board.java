@@ -21,9 +21,12 @@ public class Board {
 
     private int x,y,rows,cols;
 
-
-
     settings appsettings;
+
+
+    private boolean vibrate;
+
+    private boolean animate;
 
 
 
@@ -45,6 +48,9 @@ public class Board {
         this.y=0;
 
         this.appsettings=settings.getInstance();
+
+        this.vibrate=this.appsettings.vibrate();
+        this.animate=this.appsettings.animate();
 
     }
 
@@ -112,10 +118,10 @@ public class Board {
             }
 
 
-            if(this.appsettings.animate()) {
+            if(this.animate) {
 
                 AlphaAnimation mAnimation = new AlphaAnimation(1, 0);
-                mAnimation.setDuration(200);
+                mAnimation.setDuration(100);
                 mAnimation.setRepeatCount(AlphaAnimation.INFINITE);
                 mAnimation.setRepeatMode(AlphaAnimation.REVERSE);
                 this.getButton(i, j).startAnimation(mAnimation);
@@ -137,6 +143,11 @@ public class Board {
         this.y=j;
     }
 
+
+    public boolean isDanger(int i,int j){
+        return this.fullBoard[i][j].isDanger();
+    }
+
     public boolean isClickable(int i,int j){
         boolean ret=false;
 
@@ -155,6 +166,19 @@ public class Board {
 
 
 
+    private void makeSlotDanger(int i,int j,int image){
+
+        this.fullBoard[i][j].makeDangers();
+        this.setBackGroundImage(i,j,image);
+    }
+
+    public void makeSkullDanger(int i,int j){
+        this.makeSlotDanger(i,j,R.drawable.skull);
+    }
+
+    public void makeHazardDanger(int i,int j){
+        this.makeSlotDanger(i,j,R.drawable.hazard);
+    }
 
 
 
