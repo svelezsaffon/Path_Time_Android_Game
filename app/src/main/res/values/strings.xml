@@ -24,6 +24,7 @@
     <string name="die_message">You have died!!</string>
     <string name="invalid_move">You cant move there!!</string>
     <string name="click_danger">You step over a danger!!</string>
+    <string name="player_is_dead">You are Dead, restart the game!!</string>
 
 
 </resources>

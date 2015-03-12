@@ -18,9 +18,14 @@ public class settings {
 
     private static String VIBRATE_MODE="vibrate_checkbox";
 
+    private static String SOUND_MODE="sound_checkbox";
+
+
     private static boolean DEFAULT_PLAY_ANIMATION=true;
 
     private static boolean DEFAULT_VIBRATE=true;
+
+    private static boolean DEFAULT_SOUND=true;
 
 
     private static settings instance=null;
@@ -61,8 +66,13 @@ public class settings {
 
     public boolean vibrate(){
         return preferences.getBoolean(settings.VIBRATE_MODE,settings.DEFAULT_VIBRATE);
-
     }
+
+
+    public boolean sound(){
+        return preferences.getBoolean(settings.SOUND_MODE,settings.DEFAULT_SOUND);
+    }
+
 
 
     private String readString(String name,String Default){

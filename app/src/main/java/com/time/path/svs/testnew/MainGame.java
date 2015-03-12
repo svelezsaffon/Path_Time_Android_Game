@@ -19,12 +19,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.os.Vibrator;
+import android.media.MediaPlayer;
 
 
 import com.time.path.svs.testnew.Game_Logic.DeadException;
 import com.time.path.svs.testnew.Game_Logic.GameLogic;
+import com.time.path.svs.testnew.Settings.settings;
 import com.time.path.svs.testnew.UI.Board_Logic.Board;
 import com.time.path.svs.testnew.Game_Logic.pair;
+
+import java.io.IOException;
 
 public class MainGame extends ActionBarActivity {
 
@@ -32,20 +37,25 @@ public class MainGame extends ActionBarActivity {
 
     ProgressBar bar=null;
 
-
     private int boardSize;
 
-
     Button startButton=null;
-
 
     private int col_row;
 
     Board board=null;
 
-
-
     private GameLogic logic;
+
+    private Vibrator vibrator;
+
+    private boolean vibrateModeOn;
+
+    private boolean soundModeOn;
+
+    private MediaPlayer bumpSound;
+
+    private MediaPlayer deadSound;
 
 
     @Override
@@ -75,9 +85,21 @@ public class MainGame extends ActionBarActivity {
 
         this.logic=GameLogic.getInstance(this.col_row);
 
+        this.logic.reset();
+
         this.board=new Board(this.col_row,this.col_row);
 
         LinearLayout board_layout=(LinearLayout) findViewById(R.id.board_layout);
+
+        this.vibrator = (Vibrator) this.getSystemService(this.VIBRATOR_SERVICE);
+
+        this.vibrateModeOn = settings.getInstance().vibrate();
+
+        this.soundModeOn=settings.getInstance().sound();
+
+
+        this.prepareSounds();
+
 
         int id=0;
         for(int i=0;i<this.col_row;i++){
@@ -113,6 +135,12 @@ public class MainGame extends ActionBarActivity {
         }
 
         this.addDangers();
+    }
+
+
+    private void prepareSounds(){
+        this.bumpSound=MediaPlayer.create(this,R.raw.short_bump);
+        this.deadSound=MediaPlayer.create(this,R.raw.die_sound);
     }
 
 
@@ -159,41 +187,89 @@ public class MainGame extends ActionBarActivity {
 
     public void clickedBoardButton(View view){
 
-        int row= view.getId() / this.col_row;
+        if(!this.logic.isPlayerDead()) {
 
-        int col=view.getId() % this.col_row;
+            int row = view.getId() / this.col_row;
 
-        if(this.board.click(row, col)){
+            int col = view.getId() % this.col_row;
 
-            if(this.board.isDanger(row,col)){
+            if (this.board.click(row, col)) {
 
-                try {
+                if (this.board.isDanger(row, col)) {
 
-                    this.logic.hitDanger();
+                    try {
 
-                    this.showToast(getString(R.string.click_danger),Toast.LENGTH_SHORT);
+                        this.logic.hitDanger();
 
-                } catch (DeadException e) {
+                        this.showToast(getString(R.string.click_danger), Toast.LENGTH_SHORT);
 
-                    this.showToast(getString(R.string.die_message),Toast.LENGTH_LONG);
+                        this.vibrate(Toast.LENGTH_SHORT);
 
-                    e.printStackTrace();
+                        this.makeBumpSound();
 
+                    } catch (DeadException e) {
+
+                        this.showToast(getString(R.string.die_message), Toast.LENGTH_LONG);
+
+                        this.vibrate(Toast.LENGTH_LONG);
+
+                        this.makeDeadSound();
+
+                        e.printStackTrace();
+
+                    }
+
+                    this.board.removeDanger(row, col);
                 }
+
+            } else {
+                this.showToast(getString(R.string.invalid_move), Toast.LENGTH_SHORT);
             }
 
-
-
         }else{
-            this.showToast(getString(R.string.invalid_move),Toast.LENGTH_SHORT);
+            this.showToast(getString(R.string.player_is_dead),Toast.LENGTH_LONG);
         }
 
+
     }
+
+    private void makeBumpSound() {
+        if(this.soundModeOn==true) {
+            this.bumpSound.start();
+        }else{
+            System.out.println("Sound effects are off");
+        }
+    }
+
+    private void makeDeadSound(){
+        if(this.soundModeOn==true) {
+            this.deadSound.start();
+        }else{
+            System.out.println("Sound effects are off");
+        }
+    }
+
 
 
     public void checkBoard(){
         //Do calculation of score
     }
+
+
+
+    public void vibrate(int length){
+        if(this.vibrateModeOn) {
+            if (this.vibrator.hasVibrator()) {
+                this.vibrator.vibrate(length);
+            } else {
+                System.out.println("No vibrator on this device");
+            }
+
+        }else{
+            System.out.println("Vibration systems of");
+        }
+    }
+
 
 
     @Override

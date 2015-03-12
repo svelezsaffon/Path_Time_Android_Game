@@ -19,11 +19,24 @@ public class GameLogic {
 
     private int coins;
 
+    private static final int DEFAULT_LIFES=5;
+
+    private static final int DEFAULT_START_LEVEL=1;
+
+    private boolean isDead;
+
     private GameLogic(int size){
-        this.level=1;
+        this.level=DEFAULT_START_LEVEL;
         this.board_size=size;
-        this.lifes=5;
+        this.lifes=DEFAULT_LIFES;
         this.coins=0;
+        this.isDead=false;
+    }
+
+
+    public void reset() {
+        this.level=DEFAULT_START_LEVEL;
+        this.lifes=DEFAULT_LIFES;
     }
 
 
@@ -65,8 +78,13 @@ public class GameLogic {
     public void hitDanger() throws DeadException{
         this.lifes--;
         if(this.lifes<=0){
+            this.isDead=true;
             throw new DeadException();
         }
+    }
+
+    public boolean isPlayerDead(){
+        return this.isDead;
     }
 
 
@@ -103,13 +121,6 @@ public class GameLogic {
         return ret;
 
     }
-
-
-
-
-
-
-
 
 
 

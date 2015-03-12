@@ -25,6 +25,10 @@ public class BoardSlot {
         return this.has_dangers;
     }
 
+    public void removeDanger(){
+        this.has_dangers=false;
+    }
+
 
 
 

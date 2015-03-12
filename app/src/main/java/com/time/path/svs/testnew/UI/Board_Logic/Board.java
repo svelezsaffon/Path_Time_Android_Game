@@ -61,6 +61,10 @@ public class Board {
     }
 
 
+    public void removeDanger(int i,int j){
+        this.fullBoard[i][j].removeDanger();
+    }
+
 
     public void setText(int i,int j,String text){
         this.getButton(i,j).setText(text);

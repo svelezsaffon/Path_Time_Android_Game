@@ -19,9 +19,11 @@
 
     <string name="pref_title_animation">Play animation</string>
 
-    <string name="pref_animation_summary">disables the flashing of the path</string>
+    <string name="pref_animation_summary">disables/enables the flashing of the path</string>
 
+    <string name="pref_sound">Sound effects</string>
 
+    <string name="pref_sound_summary">disables/enable the sound effects of the game</string>
 
 
 </resources>
