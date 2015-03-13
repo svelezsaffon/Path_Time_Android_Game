@@ -19,7 +19,9 @@ public class GameLogic {
 
     private int coins;
 
-    private static final int DEFAULT_LIFES=5;
+    public static final int DEFAULT_LIFES=4;
+
+    public static final int DEFAULT_COINS=2;
 
     private static final int DEFAULT_START_LEVEL=1;
 
@@ -62,16 +64,18 @@ public class GameLogic {
 
     public void gotNewCoin() throws NewLevelException{
         this.coins=this.coins+1;
-        int aux = (this.coins / 10)+1;
 
-
-        if(aux>this.level){
-            this.level=aux;
-            throw new NewLevelException(this.level);
+        if(this.coins % 2==0){
+            this.advanceLevele();
+            throw new NewLevelException(this.getLevel());
         }
 
-        this.level=aux;
 
+
+    }
+
+    public int getCoins(){
+        return this.coins;
     }
 
 
@@ -99,6 +103,31 @@ public class GameLogic {
         int randomNum = (rand.nextInt((this.board_size-1) + 1)+1) * this.level;
 
         return randomNum;
+
+    }
+
+
+
+    public pair<Integer>[] generatecOINSPositions(){
+        int dangers=this.generateNumberOfDangers();
+
+        pair<Integer> []ret=new pair[DEFAULT_COINS];
+
+
+        Random colrand= new Random();
+        Random rowrand= new Random();
+
+        for(int i=0;i<DEFAULT_COINS;i++){
+
+            int col = (colrand.nextInt((this.board_size - 0) + 1) + 0)%this.board_size;
+            int row = (rowrand.nextInt((this.board_size - 0) + 1) + 0)%this.board_size;
+
+            ret[i]=new pair<Integer>(col,row);
+
+        }
+
+
+        return ret;
 
     }
 

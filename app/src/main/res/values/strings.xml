@@ -25,6 +25,8 @@
     <string name="invalid_move">You cant move there!!</string>
     <string name="click_danger">You step over a danger!!</string>
     <string name="player_is_dead">You are Dead, restart the game!!</string>
+    <string name="got_coin">Got a new coin!!</string>
+    <string name="new_level">Hooray, new level!!</string>
 
 
 </resources>

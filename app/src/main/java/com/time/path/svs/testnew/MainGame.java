@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Vibrator;
 import android.media.MediaPlayer;
@@ -27,6 +28,7 @@ import android.graphics.drawable.Drawable;
 
 import com.time.path.svs.testnew.Game_Logic.DeadException;
 import com.time.path.svs.testnew.Game_Logic.GameLogic;
+import com.time.path.svs.testnew.Game_Logic.NewLevelException;
 import com.time.path.svs.testnew.Settings.settings;
 import com.time.path.svs.testnew.UI.Board_Logic.Board;
 import com.time.path.svs.testnew.Game_Logic.pair;
@@ -59,7 +61,13 @@ public class MainGame extends ActionBarActivity {
 
     private MediaPlayer deadSound;
 
+    private MediaPlayer coinSound;
+
+    private MediaPlayer levelSound;
+
     private ImageView healtBar[];
+
+    private TextView coinsIU;
 
 
     @Override
@@ -74,6 +82,7 @@ public class MainGame extends ActionBarActivity {
     private void startVariables() {
 
 
+        this.coinsIU=new TextView(this);
 
         this.bar=(ProgressBar) findViewById(R.id.bar_time_left);
         this.startButton=(Button) findViewById(R.id.button_start_game);
@@ -139,6 +148,7 @@ public class MainGame extends ActionBarActivity {
         }
 
         this.addDangers();
+        this.addCoins();
 
     }
 
@@ -152,14 +162,24 @@ public class MainGame extends ActionBarActivity {
     private void initLifes(){
         LinearLayout aux_layout=new LinearLayout(this);
 
-        this.healtBar=new ImageView[5];
+        this.healtBar=new ImageView[GameLogic.DEFAULT_LIFES];
 
-        for(int i=0;i<5;i++) {
+        for(int i=0;i<GameLogic.DEFAULT_LIFES;i++) {
             this.healtBar[i]=new ImageView(this);
             Drawable drawable = getResources().getDrawable(R.drawable.heart_icon);
             this.healtBar[i].setImageDrawable(drawable);
             aux_layout.addView(this.healtBar[i]);
         }
+
+        Drawable globe = getResources().getDrawable(R.drawable.globe);
+        ImageView globeview=new ImageView(this);
+        globeview.setImageDrawable(globe);
+        aux_layout.addView(globeview);
+
+
+        this.coinsIU.setText(this.logic.getCoins()+"");
+
+        aux_layout.addView(this.coinsIU);
 
         LinearLayout board_layout=(LinearLayout) findViewById(R.id.healt_layout);
         board_layout.addView(aux_layout);
@@ -169,6 +189,8 @@ public class MainGame extends ActionBarActivity {
     private void prepareSounds(){
         this.bumpSound=MediaPlayer.create(this,R.raw.short_bump);
         this.deadSound=MediaPlayer.create(this,R.raw.die_sound);
+        this.coinSound=MediaPlayer.create(this,R.raw.coins);
+        this.levelSound=MediaPlayer.create(this,R.raw.wooho);
     }
 
 
@@ -178,6 +200,13 @@ public class MainGame extends ActionBarActivity {
 
         for(int i=0;i<positions.length;i++){
             this.board.makeSkullDanger(positions[i].first,positions[i].second);
+        }
+    }
+
+    public void addCoins(){
+        pair<Integer> []pos=this.logic.generatecOINSPositions();
+        for(int i=0;i<pos.length;i++){
+            this.board.makeCoinSlot(pos[i].first,pos[i].second);
         }
     }
 
@@ -224,8 +253,6 @@ public class MainGame extends ActionBarActivity {
             if (this.board.click(row, col)) {
 
                 if (this.board.isDanger(row, col)) {
-
-
                     try {
 
                         this.logic.hitDanger();
@@ -244,12 +271,35 @@ public class MainGame extends ActionBarActivity {
 
                         this.makeDeadSound();
 
-                        e.printStackTrace();
+
 
                     }
 
                     this.updateLifes();
                     this.board.removeDanger(row, col);
+                }else if(this.board.isCoin(row,col)){
+
+                    System.out.println("Ne coin");
+
+                    try {
+
+                        this.logic.gotNewCoin();
+
+                        this.makeCoinSound();
+
+                        this.showToast(getString(R.string.got_coin),Toast.LENGTH_SHORT);
+
+                    } catch (NewLevelException e) {
+
+                        this.makeLevelSound();
+
+                        this.showToast(getString(R.string.new_level),Toast.LENGTH_SHORT);
+
+                    }
+
+                    this.coinsIU.setText(this.logic.getCoins()+"");
+
+                    this.board.removeCoin(row,col);
                 }
 
             } else {
@@ -271,9 +321,26 @@ public class MainGame extends ActionBarActivity {
         }
     }
 
+    private void makeCoinSound(){
+        if(this.soundModeOn==true) {
+            this.coinSound.start();
+        }else{
+            System.out.println("Sound effects are off");
+        }
+    }
+
     private void makeDeadSound(){
         if(this.soundModeOn==true) {
             this.deadSound.start();
+        }else{
+            System.out.println("Sound effects are off");
+        }
+    }
+
+
+    private void makeLevelSound(){
+        if(this.soundModeOn==true) {
+            this.levelSound.start();
         }else{
             System.out.println("Sound effects are off");
         }

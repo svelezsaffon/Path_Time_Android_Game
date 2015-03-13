@@ -65,6 +65,10 @@ public class Board {
         this.fullBoard[i][j].removeDanger();
     }
 
+    public void removeCoin(int i,int j){
+        this.fullBoard[i][j].removeCoin();
+    }
+
 
     public void setText(int i,int j,String text){
         this.getButton(i,j).setText(text);
@@ -152,6 +156,10 @@ public class Board {
         return this.fullBoard[i][j].isDanger();
     }
 
+    public boolean isCoin(int i,int j){
+        return this.fullBoard[i][j].isCoin();
+    }
+
     public boolean isClickable(int i,int j){
         boolean ret=false;
 
@@ -174,6 +182,12 @@ public class Board {
 
         this.fullBoard[i][j].makeDangers();
         this.setBackGroundImage(i,j,image);
+    }
+
+
+    public void makeCoinSlot(int i,int j){
+         this.fullBoard[i][j].makeCoin();
+        this.setBackGroundImage(i,j,R.drawable.globe);
     }
 
     public void makeSkullDanger(int i,int j){

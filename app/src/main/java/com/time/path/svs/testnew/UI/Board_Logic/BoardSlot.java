@@ -12,6 +12,8 @@ public class BoardSlot {
 
     private boolean has_dangers;
 
+    private boolean has_coin;
+
     public BoardSlot(){
         this.has_dangers=false;
     }
@@ -30,6 +32,17 @@ public class BoardSlot {
     }
 
 
+    public void makeCoin(){
+        this.has_coin=true;
+    }
+
+    public boolean isCoin(){
+        return this.has_coin;
+    }
+
+    public void removeCoin(){
+        this.has_coin=false;
+    }
 
 
 
